@@ -1,11 +1,21 @@
 import React from 'react';
 
-const HomePage = () => {
+import { sql } from "@vercel/postgres";
+
+export default async function Cart({
+  params
+} : {
+  params: { user: string }
+}): Promise<JSX.Element> {
+  const { rows } = await sql`SELECT * from CARTS where user_id=${params.user}`;
+
   return (
     <div>
-      <h1>Welcome to My Next.js Site!</h1>
+      {rows.map((row) => (
+        <div key={row.id}>
+          {row.id} - {row.quantity}
+        </div>
+      ))}
     </div>
   );
-};
-
-export default HomePage;
+}
